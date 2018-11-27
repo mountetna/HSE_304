@@ -20,11 +20,19 @@ remove_genes_with_no_exp <- function(mat) {
 # by default the heatmap.2 distance method is euclidean
 hclust.ward = function(d) hclust(d,method="ward.D2")
 
+
+# color breaks for heatmap
+# z scored values should have max red > 1.95 and max green < 1.95
+breaks <- (-40:40 / 20)
+breaks[81] = 10
+breaks[1] = -10
+
 # e.g. heatmap
 heatmap.2(
   mat, # this is where the genes by samples matrix goes
   trace = "none",
-  breaks = (-40:40 / 20),
+  key = TRUE, # display the color key
+  breaks = breaks,
   hclust = hclust.ward,
   col = green_to_red_color_ramp,
   srtCol = 45,
@@ -32,6 +40,14 @@ heatmap.2(
   #ColSideColors, - argument to put in color labels for columns c("blue", "yellow", "blue")
   #RowSideColors - argument to put in color labels for rows c("blue", "yellow", "blue")
 )
+
+# color annotation labels
+legend("topright",
+       legend=c("high", "low", "", "label 1", "label 2"), #labels
+       fill=c("red", "green", "white", "purple", "blue"), #colors
+       border=FALSE,
+       bty="n",
+       y.intersp = 0.7, cex=0.7)
 
 # e.g. getting the reordered columns or rows from the heatmap
 orig_mat <- matrix() #some gene by sample matrix
